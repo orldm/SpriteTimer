@@ -13,6 +13,7 @@ class GameScene: SKScene {
     var elapsedTime: CFTimeInterval = 0.0
     var timeInterval: CFTimeInterval?
     let lineNode = SKSpriteNode()
+    let squareNode = SKSpriteNode()
     let angle = CGFloat(-M_PI/30.0)
     let myLabel = SKLabelNode(fontNamed:"Helvetica")
     var secondsCount = 0
@@ -27,12 +28,16 @@ class GameScene: SKScene {
         myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
         self.addChild(myLabel)
         
-        
         lineNode.size = CGSize(width: 4.0, height: CGRectGetMidY(self.frame)/2.0 - 10)
         lineNode.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame))
         lineNode.anchorPoint = CGPoint(x: 0.5, y: 0.0)
         lineNode.color = SKColor.blueColor()
         addChild(lineNode)
+        
+        squareNode.size = CGSize(width: 60, height: 60)
+        squareNode.position = CGPoint(x: 0, y: CGRectGetMidY(self.frame)/2.0 - 10)
+        squareNode.color = SKColor.blueColor()
+        lineNode.addChild(squareNode)
         
     }
     
