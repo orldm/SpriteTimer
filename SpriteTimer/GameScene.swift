@@ -14,23 +14,36 @@ class GameScene: SKScene {
     var timeInterval: CFTimeInterval?
     let lineNode = SKSpriteNode()
     let squareNode = SKSpriteNode()
+    var dialNode: SKShapeNode!
     var angle: Double = 0 //CGFloat(M_PI/30.0)
     let myLabel = SKLabelNode(fontNamed:"Helvetica")
     var secondsCount: Int = 0
     var tickHappened = false
     var clockIsSet = false
     var settingIsEnabled = false
+    var dialRadius: CGFloat = 0
+    var arcCenter = CGPoint(x: 0, y: 0)
     
     override func didMoveToView(view: SKView) {
         
         //timeInterval = CF
+        
+        dialRadius = min(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
+        arcCenter = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame))
+        
+        let path = UIBezierPath(arcCenter: arcCenter, radius: dialRadius/2.0, startAngle: CGFloat(M_PI/2.0), endAngle: CGFloat(M_PI/2.0), clockwise: true).CGPath
+        
+        dialNode = SKShapeNode(path: path)
+        dialNode.strokeColor = SKColor.blueColor()
+        addChild(dialNode)
+        
         
         myLabel.text = "0";
         myLabel.fontSize = 65;
         myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
         self.addChild(myLabel)
         
-        lineNode.size = CGSize(width: 4.0, height: CGRectGetMidY(self.frame)/2.0 - 10)
+        lineNode.size = CGSize(width: 4.0, height: dialRadius/2.0 - 10)
         lineNode.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame))
         lineNode.anchorPoint = CGPoint(x: 0.5, y: 0.0)
         lineNode.color = SKColor.blueColor()
@@ -41,6 +54,12 @@ class GameScene: SKScene {
         squareNode.color = SKColor.blueColor()
         lineNode.addChild(squareNode)
         
+    }
+    
+    
+    func updateDialPath(angle: CGFloat) {
+        let path = UIBezierPath(arcCenter: arcCenter, radius: dialRadius/2.0, startAngle: angle + CGFloat(M_PI/2), endAngle: CGFloat(M_PI/2.0), clockwise: true).CGPath
+        dialNode.path = path
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
@@ -69,6 +88,8 @@ class GameScene: SKScene {
                     if self.angle < 0 { self.angle = 60 + self.angle }
                     self.myLabel.text = "\(Int(self.angle))"
                     self.secondsCount = Int(self.angle)
+                    let clockAngle = -CGFloat(self.secondsCount)*CGFloat(M_PI)/30
+                    self.updateDialPath(clockAngle)
                 })
             
         }
@@ -88,9 +109,10 @@ class GameScene: SKScene {
             }
             timeInterval = currentTime
             
-            if elapsedTime >= 0.9 && !tickHappened {
+            if elapsedTime >= 0.5 && !tickHappened {
                 let clockAngle = -CGFloat(secondsCount)*CGFloat(M_PI)/30
-                lineNode.runAction(SKAction.rotateToAngle(clockAngle, duration: 0.1, shortestUnitArc: true))
+                lineNode.runAction(SKAction.rotateToAngle(clockAngle, duration: 0.5, shortestUnitArc: true))
+                updateDialPath(clockAngle)
                 tickHappened = true
             }
             
