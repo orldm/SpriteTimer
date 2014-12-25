@@ -13,7 +13,6 @@ class GameScene: SKScene {
     var elapsedTime: CFTimeInterval = 0.0
     var timeInterval: CFTimeInterval?
     let lineNode = SKSpriteNode()
-//    let squareNode = SKSpriteNode()
     var handleNode: SKShapeNode!
     var dialNode: SKShapeNode!
     var angle: Double = 0 //CGFloat(M_PI/30.0)
@@ -58,11 +57,7 @@ class GameScene: SKScene {
         lineNode.anchorPoint = CGPoint(x: 0.5, y: 0.0)
         lineNode.color = SKColor.clearColor()
         addChild(lineNode)
-        
-//        squareNode.size = CGSize(width: 60, height: 60)
-//        squareNode.position = CGPoint(x: 0, y: CGRectGetMidY(self.frame)/2.0 - 10)
-//        squareNode.color = SKColor.blueColor()
-//        lineNode.addChild(squareNode)
+
         
         handleNode = SKShapeNode(circleOfRadius: 40)
         handleNode.position = CGPoint(x: 0, y: CGRectGetMidY(self.frame)/2.0 - 5)
